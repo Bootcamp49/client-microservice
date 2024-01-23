@@ -4,7 +4,7 @@ info:
   description: Especificación de endpoints para el API Rest de clientes pertenecientes a un banco.
   version: 1.0.0
 servers:
-  - url: localhost:8080/clients/v1
+  - url: http://localhost:8083/api/v1
 tags:
   - name: Client
     description: Administración de clientes
@@ -29,8 +29,7 @@ paths:
           description: Id del cliente a actualizar
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '200':
           description: Operación satisfactoria
@@ -50,8 +49,7 @@ paths:
           description: Id del cliente a buscar
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '200':
           description: Operación satisfactoria
@@ -71,8 +69,7 @@ paths:
           description: Id del cliente a eliminar
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '204':
           description: Operación satisfactoria
