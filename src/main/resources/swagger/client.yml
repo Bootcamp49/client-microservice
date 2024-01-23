@@ -1,0 +1,140 @@
+openapi: 3.0.3
+info:
+  title: Clientes
+  description: Especificación de endpoints para el API Rest de clientes pertenecientes a un banco.
+  version: 1.0.0
+servers:
+  - url: localhost:8080/clients/v1
+tags:
+  - name: Client
+    description: Administración de clientes
+paths:
+  /client/{id}:
+    put:
+      tags:
+        - Client
+      summary: Actualización de un cliente específico 
+      description: Retorna al cliente actualizado
+      operationId: updateClientById
+      requestBody:
+        description: Cuerpo del cliente a actualizar
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+        required: true
+      parameters:
+        - name: id
+          in: path
+          description: Id del cliente a actualizar
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operación satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'          
+    get:
+      tags: 
+        - Client
+      summary: Retorna un cliente en específico
+      description: Retorna un cliente específico en base a su id
+      operationId: findClientById
+      parameters:
+        - name: id
+          in: path
+          description: Id del cliente a buscar
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operación satisfactoria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+    delete:
+      tags:
+        - Client
+      summary: Elimina un cliente en específico
+      description: Elimina un cliente en base a su id
+      operationId: deleteClientById
+      parameters:
+        - name: id
+          in: path
+          description: Id del cliente a eliminar
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Operación satisfactoria
+  /client:
+    get:
+      tags:
+        - Client
+      summary: Retorna todos los clientes del sistema
+      description: Retorna todos los clientes registrados
+      operationId: findAllClients
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+    post:
+      tags:
+        - Client
+      summary: Registra un nuevo cliente en el sistema
+      description: Agrega un nuevo cliente al sistema
+      operationId: addClient
+      requestBody:
+        description: Crear un nuevo cliente en el sistema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+components:
+  schemas:
+    Client:
+      type: object
+      properties:
+        id:
+          type: string
+          example: asd1234567890fghjkl
+        name:
+          type: string
+          example: Juan
+        lastName:
+          type: string
+          example: Ramos
+        documentNumber:
+          type: string
+          example: 72094565
+        password:
+          type: string
+          example: '12345'
+        clientType:
+          type: string
+          description: tipo de cliente
+          enum:
+            - personal
+            - empresarial
