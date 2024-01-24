@@ -1,0 +1,74 @@
+package com.nttdata.bootcamp.clientmanagement.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nttdata.bootcamp.clientmanagement.model.Client;
+import com.nttdata.bootcamp.clientmanagement.service.ClientService;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+@RestController
+@RequestMapping("/clients/v1")
+public class ClientController {
+
+    /**
+     * Interfaz de clientes
+     */
+    @Autowired
+    private ClientService clientService;
+
+    /**
+     * @param id Id del cliente a actualizar
+     * @param client Cuerpo del cliente a actualizar
+     * @return Retorna el cuerpo del cliente actualizado
+     */
+    @PutMapping("/client/{id}")
+    public Mono<Client> updateClient(@PathVariable String id, @RequestBody Client client){
+        return clientService.updateClient(id, client);
+    }
+
+    /**
+     * @param id Id del cliente a obtener
+     * @return Retorna un cliente específico por su Id
+     */
+    @GetMapping("/client/{id}")
+    public Mono<Client> findById(@PathVariable String id){
+        return clientService.findById(id);
+    }
+
+    /**
+     * @param id Id del cliente a eliminar
+     * @return Retorna un Void sobre la eliminación del cliente
+     */
+    @DeleteMapping("/client/{id}")
+    public Mono<Void> deleteClient(@PathVariable String id){
+        return clientService.deleteClient(id);
+    }
+
+    /**
+     * @return Retorna todos los clientes del sistema
+     */
+    @GetMapping("/client")
+    public Flux<Client> findClients(){
+        return clientService.findAllClients();
+    }
+
+    /**
+     * @param client Cuerpo del cliente a crear
+     * @return Rotorna el cuerpo del cliente ya creado
+     */
+    @PostMapping("/client")
+    public Mono<Client> createClient(@RequestBody Client client){
+        return clientService.createClient(client);
+    }
+
+}
