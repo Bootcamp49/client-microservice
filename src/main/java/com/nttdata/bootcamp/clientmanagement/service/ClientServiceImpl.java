@@ -1,15 +1,17 @@
 package com.nttdata.bootcamp.clientmanagement.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.nttdata.bootcamp.clientmanagement.model.Client;
 import com.nttdata.bootcamp.clientmanagement.repository.ClientRepository;
-
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Implementación de la interfaz de clientes.
+ */
 @RequiredArgsConstructor
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -18,7 +20,7 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
 
     @Override
-    public Mono<Client> updateClient(String id, Client client) {
+    public Mono<Client> updateClient(@NonNull String id, Client client) {
         return clientRepository.findById(id)
         .flatMap(existingClient -> {
             existingClient.setName(client.getName());
@@ -36,17 +38,17 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Mono<Client> findById(String id) {
+    public Mono<Client> findById(@NonNull String id) {
         return clientRepository.findById(id);
     }
 
     @Override
-    public Mono<Void> deleteClient(String id) {
+    public Mono<Void> deleteClient(@NonNull String id) {
         return clientRepository.deleteById(id);
     }
 
     @Override
-    public Mono<Client> createClient(Client client) {
+    public Mono<Client> createClient(@NonNull Client client) {
         return clientRepository.save(client);
     }
     
