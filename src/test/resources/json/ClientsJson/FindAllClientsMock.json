@@ -1,0 +1,10 @@
+[
+    {
+      "id": "asd1234567890fghjkl",
+      "name": "Juan",
+      "lastName": "Ramos",
+      "documentNumber": "72094565",
+      "password": "12345",
+      "clientType": "personal"
+    }
+  ]
