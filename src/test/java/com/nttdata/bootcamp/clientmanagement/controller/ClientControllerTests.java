@@ -36,10 +36,10 @@ class ClientControllerTests {
     @Test
     void testFindClients() {
         when(clientService.findAllClients()).thenReturn(Flux.just(clientMockResponse()));
-        Flux<Client> responseFlux = clientController.findClients();
+        Flux<Client> responseController = clientController.findClients();
         Flux<Client> responseToCompare = Flux.just(
                 util.serializeArchive(ConstantsUtil.findAllClientsMock_Success, Client[].class));
-        assertThat(responseFlux).usingRecursiveComparison().isEqualTo(responseToCompare);
+        assertThat(responseController).usingRecursiveComparison().isEqualTo(responseToCompare);
     }
 
     @Test
