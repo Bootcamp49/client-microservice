@@ -77,4 +77,23 @@ public class ClientController {
         return clientService.createClient(client);
     }
 
+    /**
+     * Método para cambiar el tipo de un cliente a VIP.
+     * @param clientId Id del cliente a volver VIP
+     * @return Retorna el cuerpo correcto del cliente con tipo VIP
+     */
+    @PutMapping("/client/VIP/{clientId}")
+    public Mono<Client> createVipClient(@PathVariable String clientId) {
+        return clientService.createVipClient(clientId);
+    }
+
+    /**
+     * Método para cambiar el tipo de un cliente a PYME.
+     * @param clientId Id del cliente a volver PYME
+     * @return Retorna el cuerpo correcto del cliente con tipo PYME
+     */
+    @PutMapping("/client/PYME/{clientId}")
+    public Mono<Client> createPyme(@PathVariable String clientId) {
+        return clientService.createMypeClient(clientId);
+    }
 }

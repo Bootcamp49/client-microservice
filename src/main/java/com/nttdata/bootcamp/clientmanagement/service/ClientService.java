@@ -43,4 +43,18 @@ public interface ClientService {
      * @return Retorna el cuerpo del cliente ya creado
      */
     Mono<Client> createClient(Client client);
+
+    /**
+     * Método para crear un nuevo cliente de tipo VIP.
+     * @param clientId Id del cliente que solicita el cambio
+     * @return Retorna el cuerpo del cliente VIP creado
+     */
+    Mono<Client> createVipClient(String clientId);
+
+    /**
+     * Método para crear un nuevo cliente de tipo MYPE.
+     * @param clientId Id del cliente que solicita el cambio
+     * @return Retorna el cuerpo del cliente Mype creado
+     */
+    Mono<Client> createMypeClient(String clientId);
 }
