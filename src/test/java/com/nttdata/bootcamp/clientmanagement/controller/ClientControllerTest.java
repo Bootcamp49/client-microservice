@@ -18,7 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @SpringBootTest
-class ClientControllerTests {
+class ClientControllerTest {
 
     @Autowired
     private ClientController clientController;
