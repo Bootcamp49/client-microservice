@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Clase para leer la respuesta del servicio de productos pasivos.
+ * Clase para organizar la respuesta de productos pasivos.
  */
 @Getter
 @Setter

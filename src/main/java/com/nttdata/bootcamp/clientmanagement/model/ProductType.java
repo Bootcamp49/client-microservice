@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Clase para los tipos de productos.
+ * Clase organizar los subtipos de los productos activos o pasivos.
  */
 @Getter
 @Setter

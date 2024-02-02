@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Clase para leer la respuesta del servicio de productos activos.
+ * Clase organizar las respuestas de productos activos.
  */
 @Getter
 @Setter

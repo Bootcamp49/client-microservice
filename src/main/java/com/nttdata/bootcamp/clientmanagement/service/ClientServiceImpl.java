@@ -3,8 +3,11 @@ package com.nttdata.bootcamp.clientmanagement.service;
 import com.nttdata.bootcamp.clientmanagement.model.Client;
 import com.nttdata.bootcamp.clientmanagement.model.ProductsActiveResponse;
 import com.nttdata.bootcamp.clientmanagement.model.ProductsPasiveResponse;
+import com.nttdata.bootcamp.clientmanagement.model.ProductsReportByClient;
 import com.nttdata.bootcamp.clientmanagement.proxy.ProductsProxy;
 import com.nttdata.bootcamp.clientmanagement.repository.ClientRepository;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +89,31 @@ public class ClientServiceImpl implements ClientService {
         return createMypeClientResponse;
     }
 
+    @Override
+    public Mono<ProductsReportByClient> getProductsReportByClientId(String clientId) {
+        ProductsReportByClient report = new ProductsReportByClient();
+        List<ProductsActiveResponse> activeProducts = new ArrayList<ProductsActiveResponse>();
+        List<ProductsPasiveResponse> pasiveProducts = new ArrayList<ProductsPasiveResponse>();
+
+        Flux<ProductsActiveResponse> activeProductsFlux = 
+            productsProxy.getProductsActiveByClientId(clientId);
+        activeProductsFlux.subscribe(productActive -> activeProducts.add(productActive));
+
+        Flux<ProductsPasiveResponse> pasiveProductsFlux =
+            productsProxy.getProductsPasiveByClientId(clientId);
+        pasiveProductsFlux.subscribe(productPasive -> pasiveProducts.add(productPasive));
+
+        Mono<ProductsReportByClient> clientReport = findById(clientId).flatMap(client -> {
+            report.setName(client.getName());
+            report.setLastName(client.getLastName());
+            report.setDocumentNumber(client.getDocumentNumber());
+            report.setProductsActive(activeProducts);
+            report.setProductsPasive(pasiveProducts);
+            return Mono.just(report);
+        });
+        return clientReport;
+    }
+
     private Boolean validateVipPymeClientCreation(String clientType, String clientId) {
         Boolean isValid = false;
         try {
@@ -117,5 +145,4 @@ public class ClientServiceImpl implements ClientService {
         }
         return isValid;
     }
-
 }

@@ -1,6 +1,7 @@
 package com.nttdata.bootcamp.clientmanagement.controller;
 
 import com.nttdata.bootcamp.clientmanagement.model.Client;
+import com.nttdata.bootcamp.clientmanagement.model.ProductsReportByClient;
 import com.nttdata.bootcamp.clientmanagement.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +34,7 @@ public class ClientController {
      * @param client Cuerpo del cliente a actualizar
      * @return Retorna el cuerpo del cliente actualizado
      */
-    @PutMapping("/client/{id}")
+    @PutMapping("{id}")
     public Mono<Client> updateClient(@PathVariable String id, @RequestBody Client client) {
         return clientService.updateClient(id, client);
     }
@@ -43,7 +44,7 @@ public class ClientController {
      * @param id Id del cliente a obtener
      * @return Retorna un cliente específico por su Id
      */
-    @GetMapping("/client/{id}")
+    @GetMapping("{id}")
     public Mono<Client> findById(@PathVariable String id) {
         return clientService.findById(id);
     }
@@ -53,7 +54,7 @@ public class ClientController {
      * @param id Id del cliente a eliminar
      * @return Retorna un Void sobre la eliminación del cliente
      */
-    @DeleteMapping("/client/{id}")
+    @DeleteMapping("{id}")
     public Mono<Void> deleteClient(@PathVariable String id) {
         return clientService.deleteClient(id);
     }
@@ -62,7 +63,7 @@ public class ClientController {
      * Método para retornar a todos los clientes.
      * @return Retorna todos los clientes del sistema
      */
-    @GetMapping("/client")
+    @GetMapping()
     public Flux<Client> findClients() {
         return clientService.findAllClients();
     }
@@ -72,7 +73,7 @@ public class ClientController {
      * @param client Cuerpo del cliente a crear
      * @return Rotorna el cuerpo del cliente ya creado
      */
-    @PostMapping("/client")
+    @PostMapping()
     public Mono<Client> createClient(@RequestBody Client client) {
         return clientService.createClient(client);
     }
@@ -82,7 +83,7 @@ public class ClientController {
      * @param clientId Id del cliente a volver VIP
      * @return Retorna el cuerpo correcto del cliente con tipo VIP
      */
-    @PutMapping("/client/VIP/{clientId}")
+    @PutMapping("/VIP/{clientId}")
     public Mono<Client> createVipClient(@PathVariable String clientId) {
         return clientService.createVipClient(clientId);
     }
@@ -92,8 +93,18 @@ public class ClientController {
      * @param clientId Id del cliente a volver PYME
      * @return Retorna el cuerpo correcto del cliente con tipo PYME
      */
-    @PutMapping("/client/PYME/{clientId}")
+    @PutMapping("/PYME/{clientId}")
     public Mono<Client> createPyme(@PathVariable String clientId) {
         return clientService.createMypeClient(clientId);
+    }
+
+    /**
+     * Método para obtener un reporte cliente con sus productos registrados.
+     * @param clientId El clientId del cliente del cual obtener el reporte.
+     * @return Se retorna los datos del cliente con sus respectivos productos.
+     */
+    @GetMapping("/report/{clientId}/products")
+    public Mono<ProductsReportByClient> getProductsReportByClientId(@PathVariable String clientId) {
+        return clientService.getProductsReportByClientId(clientId);
     }
 }

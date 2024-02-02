@@ -1,6 +1,7 @@
 package com.nttdata.bootcamp.clientmanagement.service;
 
 import com.nttdata.bootcamp.clientmanagement.model.Client;
+import com.nttdata.bootcamp.clientmanagement.model.ProductsReportByClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -57,4 +58,11 @@ public interface ClientService {
      * @return Retorna el cuerpo del cliente Mype creado
      */
     Mono<Client> createMypeClient(String clientId);
+
+    /**
+     * Método para obtener el reporte de un cliente y todos los productos que pueda tener.
+     * @param clientId Id del cliente del cual se generará su reporte
+     * @return retorna los datos del cliente y los datos de los productos que pueda tener
+     */
+    Mono<ProductsReportByClient> getProductsReportByClientId(String clientId);
 }
