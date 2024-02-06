@@ -19,7 +19,9 @@ public class ProductsProxyImpl implements ProductsProxy {
     @Override
     public Flux<ProductsPasiveResponse> getProductsPasiveByClientId(String clientId) {
         Flux<ProductsPasiveResponse> response = webClient.get()
-                .uri("/product/pasive/client/{clientId}", clientId)
+                .uri(uriBuilder -> uriBuilder
+                    .path("/product/pasive/client/{clientId}")
+                    .build(clientId))
                 .retrieve()
                 .bodyToFlux(ProductsPasiveResponse.class);
         return response;
@@ -28,7 +30,9 @@ public class ProductsProxyImpl implements ProductsProxy {
     @Override
     public Flux<ProductsActiveResponse> getProductsActiveByClientId(String clientId) {
         Flux<ProductsActiveResponse> response = webClient.get()
-                .uri("/product/active/client/{clientId}", clientId)
+                .uri(uriBuilder -> uriBuilder
+                    .path("/product/active/client/{clientId}")
+                    .build(clientId))
                 .retrieve()
                 .bodyToFlux(ProductsActiveResponse.class);
         return response;
