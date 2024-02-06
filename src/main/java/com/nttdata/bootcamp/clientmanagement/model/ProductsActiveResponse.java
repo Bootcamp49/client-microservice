@@ -1,5 +1,6 @@
 package com.nttdata.bootcamp.clientmanagement.model;
 
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,4 +29,8 @@ public class ProductsActiveResponse {
     private String creditCardNumber;
 
     private String clientId;
+
+    private LocalDate paymentDate;
+
+    private Double paymentAmount;
 }
