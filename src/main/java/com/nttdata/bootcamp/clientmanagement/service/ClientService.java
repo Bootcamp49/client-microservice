@@ -1,7 +1,7 @@
 package com.nttdata.bootcamp.clientmanagement.service;
 
-import com.nttdata.bootcamp.clientmanagement.model.Client;
-import com.nttdata.bootcamp.clientmanagement.model.ProductsReportByClient;
+import com.nttdata.bootcamp.clientmanagement.model.ProductsReportByClientResponse;
+import com.nttdata.bootcamp.clientmanagement.model.entity.Client;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -64,5 +64,5 @@ public interface ClientService {
      * @param clientId Id del cliente del cual se generará su reporte
      * @return retorna los datos del cliente y los datos de los productos que pueda tener
      */
-    Mono<ProductsReportByClient> getProductsReportByClientId(String clientId);
+    Mono<ProductsReportByClientResponse> getProductsReportByClientId(String clientId);
 }

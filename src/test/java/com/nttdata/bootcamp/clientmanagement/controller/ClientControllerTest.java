@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.nttdata.bootcamp.clientmanagement.model.Client;
+import com.nttdata.bootcamp.clientmanagement.model.entity.Client;
 import com.nttdata.bootcamp.clientmanagement.service.ClientService;
 import com.nttdata.bootcamp.clientmanagement.util.ConstantsUtil;
 import com.nttdata.bootcamp.clientmanagement.util.Util;

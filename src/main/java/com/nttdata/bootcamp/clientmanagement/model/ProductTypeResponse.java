@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductType {
+public class ProductTypeResponse {
     Integer id;
     String description;
 }

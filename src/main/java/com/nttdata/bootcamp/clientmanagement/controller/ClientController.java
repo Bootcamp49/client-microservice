@@ -1,7 +1,7 @@
 package com.nttdata.bootcamp.clientmanagement.controller;
 
-import com.nttdata.bootcamp.clientmanagement.model.Client;
-import com.nttdata.bootcamp.clientmanagement.model.ProductsReportByClient;
+import com.nttdata.bootcamp.clientmanagement.model.ProductsReportByClientResponse;
+import com.nttdata.bootcamp.clientmanagement.model.entity.Client;
 import com.nttdata.bootcamp.clientmanagement.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -104,7 +104,7 @@ public class ClientController {
      * @return Se retorna los datos del cliente con sus respectivos productos.
      */
     @GetMapping("/report/{clientId}/products")
-    public Mono<ProductsReportByClient> getProductsReportByClientId(@PathVariable String clientId) {
+    public Mono<ProductsReportByClientResponse> getProductsReportByClientId(@PathVariable String clientId) {
         return clientService.getProductsReportByClientId(clientId);
     }
 }

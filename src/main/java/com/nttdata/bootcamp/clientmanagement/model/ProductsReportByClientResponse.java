@@ -1,5 +1,6 @@
 package com.nttdata.bootcamp.clientmanagement.model;
 
+import com.nttdata.bootcamp.clientmanagement.model.entity.Client;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductsReportByClient extends Client {
+public class ProductsReportByClientResponse extends Client {
     List<ProductsActiveResponse> productsActive;
 
     List<ProductsPasiveResponse> productsPasive;

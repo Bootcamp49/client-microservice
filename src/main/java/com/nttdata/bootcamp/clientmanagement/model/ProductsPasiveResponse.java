@@ -17,7 +17,7 @@ import lombok.Setter;
 public class ProductsPasiveResponse {
     private String id;
 
-    private ProductType type;
+    private ProductTypeResponse type;
 
     private String accountNumber;
 

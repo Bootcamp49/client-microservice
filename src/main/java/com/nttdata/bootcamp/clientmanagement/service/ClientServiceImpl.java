@@ -1,9 +1,9 @@
 package com.nttdata.bootcamp.clientmanagement.service;
 
-import com.nttdata.bootcamp.clientmanagement.model.Client;
 import com.nttdata.bootcamp.clientmanagement.model.ProductsActiveResponse;
 import com.nttdata.bootcamp.clientmanagement.model.ProductsPasiveResponse;
-import com.nttdata.bootcamp.clientmanagement.model.ProductsReportByClient;
+import com.nttdata.bootcamp.clientmanagement.model.ProductsReportByClientResponse;
+import com.nttdata.bootcamp.clientmanagement.model.entity.Client;
 import com.nttdata.bootcamp.clientmanagement.proxy.ProductsProxy;
 import com.nttdata.bootcamp.clientmanagement.repository.ClientRepository;
 import java.util.ArrayList;
@@ -90,8 +90,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Mono<ProductsReportByClient> getProductsReportByClientId(String clientId) {
-        ProductsReportByClient report = new ProductsReportByClient();
+    public Mono<ProductsReportByClientResponse> getProductsReportByClientId(String clientId) {
+        ProductsReportByClientResponse report = new ProductsReportByClientResponse();
         List<ProductsActiveResponse> activeProducts = new ArrayList<ProductsActiveResponse>();
         List<ProductsPasiveResponse> pasiveProducts = new ArrayList<ProductsPasiveResponse>();
 
@@ -103,7 +103,7 @@ public class ClientServiceImpl implements ClientService {
             productsProxy.getProductsPasiveByClientId(clientId);
         pasiveProductsFlux.subscribe(productPasive -> pasiveProducts.add(productPasive));
 
-        Mono<ProductsReportByClient> clientReport = findById(clientId).flatMap(client -> {
+        Mono<ProductsReportByClientResponse> clientReport = findById(clientId).flatMap(client -> {
             report.setName(client.getName());
             report.setLastName(client.getLastName());
             report.setDocumentNumber(client.getDocumentNumber());

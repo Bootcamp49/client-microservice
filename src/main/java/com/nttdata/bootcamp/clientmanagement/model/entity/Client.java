@@ -1,4 +1,4 @@
-package com.nttdata.bootcamp.clientmanagement.model;
+package com.nttdata.bootcamp.clientmanagement.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
