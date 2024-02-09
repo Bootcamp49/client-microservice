@@ -14,7 +14,7 @@ import reactor.core.publisher.Flux;
 @Service
 public class ProductsProxyImpl implements ProductsProxy {
 
-    private WebClient webClient = WebClient.create("http://localhost:8081");
+    private WebClient webClient = WebClient.create("http://localhost:8084");
 
     @Override
     public Flux<ProductsPasiveResponse> getProductsPasiveByClientId(String clientId) {
