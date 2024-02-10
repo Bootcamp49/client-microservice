@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
  * Controlador para el manejo de clientes.
  */
 @RestController
-@RequestMapping("/clients/v1")
+@RequestMapping("clients/v1")
 public class ClientController {
 
     /**
@@ -34,7 +34,7 @@ public class ClientController {
      * @param client Cuerpo del cliente a actualizar
      * @return Retorna el cuerpo del cliente actualizado
      */
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public Mono<Client> updateClient(@PathVariable String id, @RequestBody Client client) {
         return clientService.updateClient(id, client);
     }
@@ -44,7 +44,7 @@ public class ClientController {
      * @param id Id del cliente a obtener
      * @return Retorna un cliente específico por su Id
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Mono<Client> findById(@PathVariable String id) {
         return clientService.findById(id);
     }
@@ -54,7 +54,7 @@ public class ClientController {
      * @param id Id del cliente a eliminar
      * @return Retorna un Void sobre la eliminación del cliente
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public Mono<Void> deleteClient(@PathVariable String id) {
         return clientService.deleteClient(id);
     }
@@ -63,7 +63,7 @@ public class ClientController {
      * Método para retornar a todos los clientes.
      * @return Retorna todos los clientes del sistema
      */
-    @GetMapping()
+    @GetMapping("/findall")
     public Flux<Client> findClients() {
         return clientService.findAllClients();
     }
@@ -73,7 +73,7 @@ public class ClientController {
      * @param client Cuerpo del cliente a crear
      * @return Rotorna el cuerpo del cliente ya creado
      */
-    @PostMapping()
+    @PostMapping("/")
     public Mono<Client> createClient(@RequestBody Client client) {
         return clientService.createClient(client);
     }
