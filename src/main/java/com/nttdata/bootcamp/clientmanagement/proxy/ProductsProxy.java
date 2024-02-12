@@ -3,6 +3,7 @@ package com.nttdata.bootcamp.clientmanagement.proxy;
 import com.nttdata.bootcamp.clientmanagement.model.ProductsActiveResponse;
 import com.nttdata.bootcamp.clientmanagement.model.ProductsPasiveResponse;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * Interface para definir los metodos a usar del microservicio de productos.
@@ -22,4 +23,6 @@ public interface ProductsProxy {
      * @return Retorna la lista de productos activos que el cliente pueda tener.
      */
     Flux<ProductsActiveResponse> getProductsActiveByClientId(String clientId);
+
+    Mono<ProductsPasiveResponse> createPasiveYankeeProduct(String clientId);
 }

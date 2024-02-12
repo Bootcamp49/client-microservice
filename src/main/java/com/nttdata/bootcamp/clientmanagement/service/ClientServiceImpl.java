@@ -37,6 +37,9 @@ public class ClientServiceImpl implements ClientService {
                     existingClient.setClientType(client.getClientType());
                     existingClient.setDocumentNumber(client.getDocumentNumber());
                     existingClient.setPassword(client.getPassword());
+                    existingClient.setCellPhoneNumber(client.getCellPhoneNumber());
+                    existingClient.setImei(client.getImei());
+                    existingClient.setEmail(client.getEmail());
                     return clientRepository.save(existingClient);
                 });
     }
@@ -112,6 +115,19 @@ public class ClientServiceImpl implements ClientService {
             return Mono.just(report);
         });
         return clientReport;
+    }
+
+    @Override
+    public Mono<Client> createYankeeClient(Client client) {
+        Mono<Client> createdClient = clientRepository.save(client);
+        if (createdClient.block() != null && createdClient.block().getId() != null) {
+            Mono<ProductsPasiveResponse> productCreated =
+                    productsProxy.createPasiveYankeeProduct(createdClient.block().getId());
+            if(productCreated.block().getId() == null){
+                return null;
+            }
+        }
+        return createdClient;
     }
 
     private Boolean validateVipPymeClientCreation(String clientType, String clientId) {

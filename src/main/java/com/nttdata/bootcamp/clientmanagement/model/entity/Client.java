@@ -23,4 +23,7 @@ public class Client {
     private String documentNumber;
     private String password;
     private String clientType;
+    private String cellPhoneNumber;
+    private String imei;
+    private String email;
 }

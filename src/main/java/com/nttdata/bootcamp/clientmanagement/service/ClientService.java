@@ -65,4 +65,11 @@ public interface ClientService {
      * @return retorna los datos del cliente y los datos de los productos que pueda tener
      */
     Mono<ProductsReportByClientResponse> getProductsReportByClientId(String clientId);
+
+    /**
+     * Método para crear un cliente Yankee.
+     * @param client Cuerpo con los datos necesarios para el cliente Yankee
+     * @return retorna el cuerpo del cliente generado
+     */
+    Mono<Client> createYankeeClient(Client client);
 }

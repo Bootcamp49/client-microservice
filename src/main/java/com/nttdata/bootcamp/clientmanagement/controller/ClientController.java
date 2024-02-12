@@ -19,7 +19,6 @@ import reactor.core.publisher.Mono;
  * Controlador para el manejo de clientes.
  */
 @RestController
-@RequestMapping("clients/v1")
 public class ClientController {
 
     /**
@@ -63,7 +62,7 @@ public class ClientController {
      * Método para retornar a todos los clientes.
      * @return Retorna todos los clientes del sistema
      */
-    @GetMapping("/findall")
+    @GetMapping()
     public Flux<Client> findClients() {
         return clientService.findAllClients();
     }
@@ -73,7 +72,7 @@ public class ClientController {
      * @param client Cuerpo del cliente a crear
      * @return Rotorna el cuerpo del cliente ya creado
      */
-    @PostMapping("/")
+    @PostMapping()
     public Mono<Client> createClient(@RequestBody Client client) {
         return clientService.createClient(client);
     }
