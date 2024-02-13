@@ -9,6 +9,8 @@ import com.nttdata.bootcamp.clientmanagement.proxy.ProductsProxy;
 import com.nttdata.bootcamp.clientmanagement.repository.ClientRepository;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ public class ClientServiceImpl implements ClientService {
     private final ProductsProxy productsProxy;
 
     @Override
+    @CircuitBreaker(name = "client", fallbackMethod = "singleClientFallback")
     public Mono<Client> updateClient(@NonNull String id, Client client) {
         return clientRepository.findById(id)
                 .flatMap(existingClient -> {
@@ -46,11 +49,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @CircuitBreaker(name = "client", fallbackMethod = "multipleClientFallback")
     public Flux<Client> findAllClients() {
         return clientRepository.findAll();
     }
 
     @Override
+    @CircuitBreaker(name = "client", fallbackMethod = "singleClientFallback")
     public Mono<Client> findById(@NonNull String id) {
         return clientRepository.findById(id);
     }
@@ -61,11 +66,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @CircuitBreaker(name = "client", fallbackMethod = "singleClientFallback")
     public Mono<Client> createClient(@NonNull Client client) {
         return clientRepository.save(client);
     }
 
     @Override
+    @CircuitBreaker(name = "client", fallbackMethod = "singleClientFallback")
     public Mono<Client> createVipClient(@NonNull String clientId) {
         Mono<Client> createVipClientResponse = null;
         Boolean isClientValidToCreate = validateVipPymeClientCreation("VIP", clientId);
@@ -80,6 +87,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @CircuitBreaker(name = "client", fallbackMethod = "singleClientFallback")
     public Mono<Client> createMypeClient(@NonNull String clientId) {
         Mono<Client> createMypeClientResponse = null;
         Boolean isClientValidToCreate = validateVipPymeClientCreation("PYME", clientId);
@@ -94,6 +102,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @CircuitBreaker(name = "client", fallbackMethod = "productReportFallback")
     public Mono<ProductsReportByClientResponse> getProductsReportByClientId(String clientId) {
         ProductsReportByClientResponse report = new ProductsReportByClientResponse();
         List<ProductsActiveResponse> activeProducts = new ArrayList<ProductsActiveResponse>();
@@ -119,6 +128,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @CircuitBreaker(name = "client", fallbackMethod = "singleClientFallback")
     public Mono<Client> createYankeeClient(Client client) {
         Mono<Client> createdClient = clientRepository.save(client);
         Client clientToValidate = createdClient.block();
@@ -171,5 +181,18 @@ public class ClientServiceImpl implements ClientService {
             System.out.println("Error clientServiceImpl: " + e);
         }
         return isValid;
+    }
+
+    private Mono<Client> singleClientFallback(Throwable throwable){
+        Client clientToReturn = new Client();
+        return Mono.just(clientToReturn);
+    }
+    private Flux<Client> multipleClientFallback(Throwable throwable){
+        Client clientToReturn = new Client();
+        return Flux.just(clientToReturn);
+    }
+    private Mono<ProductsReportByClientResponse> productReportFallback(Throwable throwable){
+        ProductsReportByClientResponse productsReportByClientResponse = new ProductsReportByClientResponse();
+        return Mono.just(productsReportByClientResponse);
     }
 }
