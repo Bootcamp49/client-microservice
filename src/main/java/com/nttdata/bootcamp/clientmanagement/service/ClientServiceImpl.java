@@ -1,5 +1,6 @@
 package com.nttdata.bootcamp.clientmanagement.service;
 
+import com.nttdata.bootcamp.clientmanagement.model.ProductTypeResponse;
 import com.nttdata.bootcamp.clientmanagement.model.ProductsActiveResponse;
 import com.nttdata.bootcamp.clientmanagement.model.ProductsPasiveResponse;
 import com.nttdata.bootcamp.clientmanagement.model.ProductsReportByClientResponse;
@@ -120,10 +121,20 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Mono<Client> createYankeeClient(Client client) {
         Mono<Client> createdClient = clientRepository.save(client);
-        if (createdClient.block() != null && createdClient.block().getId() != null) {
+        Client clientToValidate = createdClient.block();
+        if (clientToValidate != null && clientToValidate.getId() != null) {
+            ProductsPasiveResponse request = new ProductsPasiveResponse();
+            ProductTypeResponse typeRequest = new ProductTypeResponse();
+            typeRequest.setId(1);
+            typeRequest.setDescription("Ahorro");
+            request.setClientId(clientToValidate.getId());
+            request.setCurrentAmount(0.0);
+            request.setType(typeRequest);
+            request.setIsYankeeProduct(true);
+
             Mono<ProductsPasiveResponse> productCreated =
-                    productsProxy.createPasiveYankeeProduct(createdClient.block().getId());
-            if(productCreated.block().getId() == null){
+                    productsProxy.createPasiveYankeeProduct(request);
+            if(clientToValidate.getId() == null){
                 return null;
             }
         }
