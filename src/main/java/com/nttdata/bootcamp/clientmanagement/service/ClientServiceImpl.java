@@ -36,14 +36,22 @@ public class ClientServiceImpl implements ClientService {
     public Mono<Client> updateClient(@NonNull String id, Client client) {
         return clientRepository.findById(id)
                 .flatMap(existingClient -> {
-                    existingClient.setName(client.getName());
-                    existingClient.setLastName(client.getLastName());
-                    existingClient.setClientType(client.getClientType());
-                    existingClient.setDocumentNumber(client.getDocumentNumber());
-                    existingClient.setPassword(client.getPassword());
-                    existingClient.setCellPhoneNumber(client.getCellPhoneNumber());
-                    existingClient.setImei(client.getImei());
-                    existingClient.setEmail(client.getEmail());
+                    existingClient.setName(client.getName() == null || client.getName().trim().isBlank() ?
+                            existingClient.getName() : client.getName());
+                    existingClient.setLastName(client.getLastName() == null || client.getLastName().trim().isBlank() ?
+                            existingClient.getLastName() : client.getLastName());
+                    existingClient.setClientType(client.getClientType() == null || client.getClientType().trim().isBlank() ?
+                            existingClient.getClientType() : client.getClientType());
+                    existingClient.setDocumentNumber(client.getDocumentNumber() == null || client.getDocumentNumber().trim().isBlank() ?
+                            existingClient.getDocumentNumber() : client.getDocumentNumber());
+                    existingClient.setPassword(client.getPassword() == null || client.getPassword().trim().isBlank() ?
+                            existingClient.getPassword() : client.getPassword());
+                    existingClient.setCellPhoneNumber(client.getCellPhoneNumber() == null || client.getCellPhoneNumber().trim().isBlank() ?
+                            existingClient.getCellPhoneNumber() : client.getCellPhoneNumber());
+                    existingClient.setImei(client.getImei() == null || client.getImei().trim().isBlank() ?
+                            existingClient.getImei() : client.getImei());
+                    existingClient.setEmail(client.getEmail() == null || client.getEmail().trim().isBlank() ?
+                            existingClient.getEmail() : client.getEmail());
                     return clientRepository.save(existingClient);
                 });
     }
@@ -68,7 +76,13 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @CircuitBreaker(name = "client", fallbackMethod = "singleClientFallback")
     public Mono<Client> createClient(@NonNull Client client) {
-        return clientRepository.save(client);
+        Mono<Client> clientSaved = null;
+        if(client.getClientType() != null && client.getClientType().trim().isBlank() &&
+                (client.getClientType().equalsIgnoreCase("personal") ||
+                        client.getClientType().equalsIgnoreCase("empresarial"))){
+            clientSaved = clientRepository.save(client);
+        }
+        return clientSaved;
     }
 
     @Override
