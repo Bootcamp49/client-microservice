@@ -77,7 +77,7 @@ public class ClientServiceImpl implements ClientService {
     @CircuitBreaker(name = "client", fallbackMethod = "singleClientFallback")
     public Mono<Client> createClient(@NonNull Client client) {
         Mono<Client> clientSaved = null;
-        if(client.getClientType() != null && client.getClientType().trim().isBlank() &&
+        if(client.getClientType() != null && !client.getClientType().trim().isBlank() &&
                 (client.getClientType().equalsIgnoreCase("personal") ||
                         client.getClientType().equalsIgnoreCase("empresarial"))){
             clientSaved = clientRepository.save(client);
@@ -89,7 +89,7 @@ public class ClientServiceImpl implements ClientService {
     @CircuitBreaker(name = "client", fallbackMethod = "singleClientFallback")
     public Mono<Client> createVipClient(@NonNull String clientId) {
         Mono<Client> createVipClientResponse = null;
-        Boolean isClientValidToCreate = validateVipPymeClientCreation("VIP", clientId);
+        boolean isClientValidToCreate = validateVipPymeClientCreation("VIP", clientId);
         if (isClientValidToCreate) {
             createVipClientResponse = clientRepository.findById(clientId)
                     .flatMap(existingClient -> {
@@ -104,7 +104,7 @@ public class ClientServiceImpl implements ClientService {
     @CircuitBreaker(name = "client", fallbackMethod = "singleClientFallback")
     public Mono<Client> createMypeClient(@NonNull String clientId) {
         Mono<Client> createMypeClientResponse = null;
-        Boolean isClientValidToCreate = validateVipPymeClientCreation("PYME", clientId);
+        boolean isClientValidToCreate = validateVipPymeClientCreation("PYME", clientId);
         if (isClientValidToCreate) {
             createMypeClientResponse = clientRepository.findById(clientId)
                     .flatMap(existingClient -> {
@@ -122,13 +122,9 @@ public class ClientServiceImpl implements ClientService {
         List<ProductsActiveResponse> activeProducts = new ArrayList<ProductsActiveResponse>();
         List<ProductsPasiveResponse> pasiveProducts = new ArrayList<ProductsPasiveResponse>();
 
-        Flux<ProductsActiveResponse> activeProductsFlux = 
-            productsProxy.getProductsActiveByClientId(clientId);
-        activeProductsFlux.subscribe(productActive -> activeProducts.add(productActive));
+        productsProxy.getProductsActiveByClientId(clientId).forEach(productActive -> activeProducts.add(productActive));
 
-        Flux<ProductsPasiveResponse> pasiveProductsFlux =
-            productsProxy.getProductsPasiveByClientId(clientId);
-        pasiveProductsFlux.subscribe(productPasive -> pasiveProducts.add(productPasive));
+        productsProxy.getProductsPasiveByClientId(clientId).forEach(productPasive -> pasiveProducts.add(productPasive));
 
         Mono<ProductsReportByClientResponse> clientReport = findById(clientId).flatMap(client -> {
             report.setName(client.getName());
@@ -155,9 +151,7 @@ public class ClientServiceImpl implements ClientService {
             request.setCurrentAmount(0.0);
             request.setType(typeRequest);
             request.setIsYankeeProduct(true);
-
-            Mono<ProductsPasiveResponse> productCreated =
-                    productsProxy.createPasiveYankeeProduct(request);
+            productsProxy.createPasiveYankeeProduct(request);
             if(clientToValidate.getId() == null){
                 return null;
             }
@@ -166,28 +160,25 @@ public class ClientServiceImpl implements ClientService {
     }
 
     private Boolean validateVipPymeClientCreation(String clientType, String clientId) {
-        Boolean isValid = false;
+        boolean isValid = false;
         try {
             if (clientType == "VIP") {
-                Flux<ProductsPasiveResponse> pasiveProducts = productsProxy
-                        .getProductsPasiveByClientId(clientId);
-                Boolean hasPasiveProductValid = pasiveProducts
-                        .filter(p -> p.getType().getId() == 2).count()
-                        .block() > 0;
-
-                isValid = hasPasiveProductValid;
-            } else if (clientType == "PYME") {
-                Flux<ProductsPasiveResponse> pasiveProducts = productsProxy
-                        .getProductsPasiveByClientId(clientId);
-                Boolean hasPasiveProductValid = pasiveProducts
-                        .filter(p -> p.getType().getId() == 2).count()
-                        .block() > 0;
-
-                Flux<ProductsActiveResponse> activeProducts = productsProxy
+                List<ProductsActiveResponse> activeProducts = productsProxy
                         .getProductsActiveByClientId(clientId);
-                Boolean hasActiveProductValid = activeProducts
-                        .filter(p -> p.getType().getId() == 3).count()
-                        .block() > 0;
+                boolean hasActiveProductValid = activeProducts.stream()
+                        .filter(p -> p.getType().getId() == 3).count() > 0;
+
+                isValid = hasActiveProductValid;
+            } else if (clientType == "PYME") {
+                List<ProductsPasiveResponse> pasiveProducts = productsProxy
+                        .getProductsPasiveByClientId(clientId);
+                boolean hasPasiveProductValid = pasiveProducts.stream()
+                        .filter(p -> p.getType().getId() == 2).count() > 0;
+
+                List<ProductsActiveResponse> activeProducts = productsProxy
+                        .getProductsActiveByClientId(clientId);
+                boolean hasActiveProductValid = activeProducts.stream()
+                        .filter(p -> p.getType().getId() == 3).count() > 0;
 
                 isValid = hasPasiveProductValid && hasActiveProductValid;
             }
@@ -198,6 +189,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     private Mono<Client> singleClientFallback(Throwable throwable){
+        System.out.println("Dentro del fallback");
         Client clientToReturn = new Client();
         return Mono.just(clientToReturn);
     }
@@ -206,6 +198,8 @@ public class ClientServiceImpl implements ClientService {
         return Flux.just(clientToReturn);
     }
     private Mono<ProductsReportByClientResponse> productReportFallback(Throwable throwable){
+        System.out.println("en el fallback");
+        System.out.println("Throwable: " + throwable.getMessage());
         ProductsReportByClientResponse productsReportByClientResponse = new ProductsReportByClientResponse();
         return Mono.just(productsReportByClientResponse);
     }

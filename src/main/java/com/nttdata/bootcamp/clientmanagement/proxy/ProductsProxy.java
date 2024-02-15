@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 /**
  * Interface para definir los metodos a usar del microservicio de productos.
  */
@@ -21,7 +23,7 @@ public interface ProductsProxy {
      * @return Retorna La lista de productos pasivos que el cliente pueda tener.
      */
     @GetMapping("/pasive/client/{clientId}")
-    Flux<ProductsPasiveResponse> getProductsPasiveByClientId(@PathVariable String clientId);
+    List<ProductsPasiveResponse> getProductsPasiveByClientId(@PathVariable String clientId);
 
     /**
      * Método para realizar la llamada al microservicio de productos.
@@ -29,8 +31,8 @@ public interface ProductsProxy {
      * @return Retorna la lista de productos activos que el cliente pueda tener.
      */
     @GetMapping("/active/client/{clientId}")
-    Flux<ProductsActiveResponse> getProductsActiveByClientId(@PathVariable String clientId);
+    List<ProductsActiveResponse> getProductsActiveByClientId(@PathVariable String clientId);
 
     @PostMapping("/pasive")
-    Mono<ProductsPasiveResponse> createPasiveYankeeProduct(ProductsPasiveResponse request);
+    ProductsPasiveResponse createPasiveYankeeProduct(ProductsPasiveResponse request);
 }
