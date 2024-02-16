@@ -140,6 +140,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @CircuitBreaker(name = "client", fallbackMethod = "singleClientFallback")
     public Mono<Client> createYankeeClient(Client client) {
+        client.setClientType("Personal"); //Por defecto se crea un cliente de tipo personal para tener asociados productos pasivos
         Mono<Client> createdClient = clientRepository.save(client);
         Client clientToValidate = createdClient.block();
         if (clientToValidate != null && clientToValidate.getId() != null) {
